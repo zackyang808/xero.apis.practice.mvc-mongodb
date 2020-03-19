@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewData["Title"] = "CreateInvoice";
+}
+<div class="ui three top attached steps">
+    <div class="active step">
+        <i class="certificate icon"></i>
+        <div class="content">
+            <div class="title">Invoicing</div>
+            <div class="description">Enter invocing imformation</div>
+        </div>
+    </div>
+    <div class="step">
+        <i class="payment icon"></i>
+        <div class="content">
+            <div class="title">Payment</div>
+            <div class="description">Let's get it paid</div>
+        </div>
+    </div>
+    <a class="step" href="index">
+        <i class="list icon"></i>
+        <div class="content">
+            <div class="title">Invoices</div>
+            <div class="description">All invoices list here</div>
+        </div>
+    </a>
+</div>
+<div class="ui attached segment">
+    @using (Html.BeginForm("Create", "Invoice", FormMethod.Post, new { enctype = "multipart/form-data", @class = "ui form" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <h4 class="ui dividing header">Invoice To</h4>
+        <div class="field">
+            <label>Name</label>
+            <input type="text" maxlength="50" name="name" placeholder="e.g. Xero Limited">
+        </div>
+        <div class="field">
+            <label>Address</label>
+            <div class="fields">
+                <div class="twelve wide field">
+                    <input type="text" maxlength="100" name="addressline1" placeholder="Street">
+                </div>
+                <div class="four wide field">
+                    <input type="text" maxlength="50" name="addressline2" placeholder="Region">
+                </div>
+            </div>
+        </div>
+        <div class="fields">
+            <div class="six wide field">
+                <input type="text" maxlength="50" name="city" placeholder="City">
+            </div>
+            <div class="four wide field">
+                <input type="text" maxlength="50" name="postalcode" placeholder="#Postal code">
+            </div>
+            <div class="six wide field">
+                <input type="text" maxlength="50" name="country" placeholder="Country" readonly value="New Zealand">
+            </div>
+        </div>
+        <h4 class="ui dividing header">Items (Only take one here for instance.)</h4>
+        <div class="fields">
+            <div class="ten wide field">
+                <input type="text" maxlength="200" name="description" placeholder="Description">
+            </div>
+            <div class="three wide field">
+                <input type="text" maxlength="10" name="quantity" placeholder="Quantity">
+            </div>
+            <div class="three wide field">
+                <input type="text" maxlength="10" name="unitAmount" placeholder="Unit amount">
+            </div>
+        </div>
+        <h5>....</h5>
+        <div class="ui tertiary inverted red segment">
+            <p>No validation added yet hence try not input invalid values.</p>
+        </div>
+        <button type="submit" class="ui positive button">
+            <i class="glyphicon glyphicon-save"></i>
+            Invoice
+        </button>
+    }
+</div>

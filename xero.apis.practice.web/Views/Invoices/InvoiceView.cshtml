@@ -1,0 +1,201 @@
+﻿@using Xero.NetStandard.OAuth2.Model
+@model Invoice
+@{
+    ViewData["Title"] = "InvoiceView";
+}
+<style>
+    .ui.table {
+        border: none !important;
+    }
+
+        .ui.table thead th {
+            border: none !important;
+        }
+
+        .ui.table tbody td {
+            border: none !important;
+        }
+</style>
+<div class="ui three top attached steps">
+    <a class="step" href="create">
+        <i class="certificate icon"></i>
+        <div class="content">
+            <div class="title">Invoicing</div>
+            <div class="description">Enter invocing imformation</div>
+        </div>
+    </a>
+    <div class="active step">
+        <i class="payment icon"></i>
+        <div class="content">
+            <div class="title">Payment</div>
+            <div class="description">Let's get it paid</div>
+        </div>
+    </div>    
+    <a class="step" href="index">
+        <i class="list icon"></i>
+        <div class="content">
+            <div class="title">Invoices</div>
+            <div class="description">All invoices list here</div>
+        </div>
+    </a>
+</div>
+<div class="ui attached segment">
+    <div class="ui centered grid">
+        <div class="fifteen wide column">
+            <table class="ui very basic table">
+                <thead>
+                    <tr>
+                        <th class="two wide">To</th>
+                        <th class="two wide">Date</th>
+                        <th class="two wide">Due Date</th>
+                        <th class="two wide">Invoice #</th>
+                        <th class="eight wide right aligned">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.Contact.Name</td>
+                        <td>@(Model.Date.HasValue ? ((DateTime)Model.Date).ToString("dd MMMM yyyy") : "")</td>
+                        <td>@(Model.DueDate.HasValue ? ((DateTime)Model.DueDate).ToString("dd MMMM yyyy") : "")</td>
+                        <td>@Model.InvoiceNumber</td>
+                        <td class="right aligned">@(string.Format("{0:N2}", Model.Total))</td>
+                    </tr>
+                    <tr>
+                        <td>@Model.Contact.Addresses.Find(x => x.AddressType == Address.AddressTypeEnum.POBOX).AddressLine1</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>@Model.Contact.Addresses.Find(x => x.AddressType == Address.AddressTypeEnum.POBOX).AddressLine2</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Model.Contact.Addresses.Find(x => x.AddressType == Address.AddressTypeEnum.POBOX).City
+                            @Model.Contact.Addresses.Find(x => x.AddressType == Address.AddressTypeEnum.POBOX).PostalCode
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>@Model.Contact.Addresses.Find(x => x.AddressType == Address.AddressTypeEnum.POBOX).Country</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="fifteen wide column" style="height:1px; border-top:1px solid #CCC; padding:0px;"></div>
+        <div class="fifteen wide column">
+            <table class="ui very basic table">
+                <thead>
+                    <tr>
+                        <th class="seven wide left aligned">Description</th>
+                        <th class="two wide right aligned">Quantity</th>
+                        <th class="two wide right aligned">Unit Price</th>
+                        <th class="three wide right aligned">Tax Rate</th>
+                        <th class="two wide right aligned">Amount @Model.CurrencyCode</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.LineItems)
+                    {
+                        <tr>
+                            <td class="left aligned">@item.Description</td>
+                            <td class="right aligned">@item.Quantity</td>
+                            <td class="right aligned">@(string.Format("{0:N2}", item.UnitAmount))</td>
+                            <td class="right aligned">15% GST on Income</td>
+                            <td class="right aligned">@(string.Format("{0:N2}", item.Quantity * item.UnitAmount))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="fifteen wide column" style="height:1px; border-top:1px solid #CCC; padding:0px;"></div>
+        <div class="fifteen wide column">
+            <table class="ui very basic table">
+                <tbody>
+                    <tr>
+                        <td class="fourteen wide right aligned"> Subtotal</td>
+                        <td class="two wide right aligned">@(string.Format("{0:N2}", Model.SubTotal))</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="fifteen wide column" style="padding-top:0;">
+            <table class="ui very basic table">
+                <tbody>
+                    <tr>
+                        <td class="fourteen wide right aligned"> TOTAL GST 15%</td>
+                        <td class="two wide right aligned"> @(string.Format("{0:N2}", Model.TotalTax))</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="fifteen wide column" style="height:1px; border-top:1px solid #CCC; padding:0px;"></div>
+        <div class="fifteen wide column">
+            <table class="ui very basic table">
+                <tbody>
+                    <tr>
+                        <td class="fourteen wide right aligned"> <b>TOTAL</b></td>
+                        <td class="two wide right aligned"> @(string.Format("{0:N2}", Model.Total))</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="fifteen wide column" style="padding-top:0;">
+            <table class="ui very basic table">
+                <tbody>
+                    <tr>
+                        <td class="fourteen wide right aligned"> Less amount paid</td>
+                        <td class="two wide right aligned"> @(string.Format("{0:N2}", Model.AmountPaid))</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="fifteen wide column" style="height:1px; border-top:1px solid #CCC; padding:0px;"></div>
+        <div class="fifteen wide column">
+            <table class="ui very basic table">
+                <tbody>
+                    <tr>
+                        <td class="fourteen wide right aligned"> <b>AMOUNT DUE</b></td>
+                        <td class="two wide right aligned"> @(string.Format("{0:N2}", Model.AmountDue))</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="fifteen wide column" style="height:1px; border-top:1px solid #CCC; padding:0; padding-bottom:2px;"></div>
+        <div class="fifteen wide column" style="height:1px; border-top:1px solid #CCC;"></div>
+        @if (Model.AmountDue > 0)
+        {
+            <div class="fifteen wide column">
+                <div class="row">
+                    <div class="four wide right floated column">
+                        @using (Html.BeginForm("Create", "Invoice", FormMethod.Post, new { enctype = "multipart/form-data", @class = "ui form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="field">
+                                <div class="ui action input">
+                                    <input type="text" name="amount" placeholder="Amount to pay">
+                                    <button type="submit" class="ui positive button">
+                                        <i class="glyphicon glyphicon-save"></i>
+                                        Pay
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>            
+        }
+    </div>
+</div>

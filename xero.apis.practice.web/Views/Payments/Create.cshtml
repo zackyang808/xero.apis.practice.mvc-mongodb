@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewData["Title"] = "Create";
+}
+
+@using (Html.BeginForm("Create", "Payments", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-success">
+        <i class="glyphicon glyphicon-save"></i>
+        Pay
+    </button>
+}
+
